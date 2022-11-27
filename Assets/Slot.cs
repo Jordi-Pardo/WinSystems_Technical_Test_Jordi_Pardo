@@ -1,32 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Timers;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Slot : MonoBehaviour
 {
-    [SerializeField] private Image figure;
-    private RectTransform rectTransform;
-
-    private void Awake()
-    {
-        rectTransform= GetComponent<RectTransform>();
-    }
+    [SerializeField] private SpriteRenderer figure;
+    Vector3 nextPos;
+    Vector3 nextPosition = Vector3.zero;
     public void Setup(Sprite sprite)
     {
         figure.sprite = sprite;
+        nextPos = transform.localPosition - new Vector3(0, 2.2f + figure.bounds.size.y, 0);
+        nextPosition = transform.localPosition;
     }
 
-    private void Update()
+    public void UpdateMe(float speed, bool wantsToStop)
     {
-        //Debug.Log($"Local position: {transform.localPosition}. World Position: {transform.position}");
-        //Debug.Log($"Rect local position: {rectTransform.localPosition}. Rect World Position: {rectTransform.position}");
-    }
-    public void UpdateMe()
-    {
-        float speed = 200f;
-        rectTransform.anchoredPosition -= speed * Time.deltaTime * new Vector2(0, 1);
 
+    }
+    public void StartScroll()
+    {
+        StartCoroutine(ScrollCO());
+    }
+
+    private IEnumerator ScrollCO()
+    {
+        float current = 0;
+        float target = 1;
+        float delta = 0;
+        while (delta < target)
+        {
+            delta = Mathf.MoveTowards(current, target, Time.deltaTime);
+            transform.localPosition = Vector3.Lerp(nextPosition, nextPos, delta);
+            yield return null;
+        }
     }
 }

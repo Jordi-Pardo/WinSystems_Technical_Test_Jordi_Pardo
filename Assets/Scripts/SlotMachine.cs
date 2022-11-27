@@ -8,7 +8,7 @@ public class SlotMachine : MonoBehaviour
 {
     [SerializeField] private Sprite[] figures;
     [SerializeField] private Slot slotPrefab;
-
+    [SerializeField] private Row[] rows;
     public Slot slot => slotPrefab;
 
     public Sprite GetSprite(int slotIndex)
@@ -23,6 +23,14 @@ public class SlotMachine : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
+    }
+
+    public void Spin()
+    {
+        foreach(Row row in rows)
+        {
+            row.Scroll();
+        }
     }
 }
